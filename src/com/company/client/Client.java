@@ -28,10 +28,7 @@ public class Client {
         BufferedReader br = null;
         try {
             OutputStream out = socket.getOutputStream();
-            InputStream in = socket.getInputStream();
-
             pw = new PrintWriter(new OutputStreamWriter(out), true);
-            br = new BufferedReader(new InputStreamReader(in));
 
             String line = null;
 
@@ -49,7 +46,6 @@ public class Client {
             try {
                 keyboard.close();
                 pw.close();
-                br.close();
                 socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
