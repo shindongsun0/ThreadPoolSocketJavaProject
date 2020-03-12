@@ -22,7 +22,7 @@ public class Client {
         }
     }
 
-    private static void readSocketBuffer(Socket socket) {
+    private static void printSocketBuffer(Socket socket) {
         BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter pw = null;
         BufferedReader br = null;
@@ -69,7 +69,7 @@ public class Client {
     public static void main(String[] args){
         Socket socket = connectSocket("localhost", 10004, 5000);
         readFileData();
-        readSocketBuffer(socket);
+        printSocketBuffer(socket);
     }
 
 }
