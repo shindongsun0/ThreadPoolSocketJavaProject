@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.Arrays;
 
 public class Client {
+    private static PrintWriter pw;
 
     private static String findMenuFile(){
         return System.getProperty("user.dir") + "/showMenu.txt";
@@ -26,28 +27,35 @@ public class Client {
         }
     }
 
-    private static void printSocketBuffer(Socket socket) {
-        BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
-        PrintWriter pw = null;
-        BufferedReader br = null;
+    private static void printSocketBuffer(Socket socket, String line){
+        OutputStream out = null;
         try {
-            OutputStream out = socket.getOutputStream();
+            out = socket.getOutputStream();
             pw = new PrintWriter(new OutputStreamWriter(out), true);
+            System.out.println("내가 보낸 메뉴 번호: " + line);
+            pw.println(line);
+        } catch (IOException e) {
+            System.out.println(e.toString());
+            System.out.println(String.format("%s OCCURRED", e.getClass().getSimpleName()));
+            System.out.println(Arrays.asList(e.getStackTrace()));
+        }
+    }
 
+    private static void getMenuFromClient(Socket socket) {
+        BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
+        try {
             String line = null;
 
             while((line = keyboard.readLine()) != null && !line.equals("quit")) {
-                System.out.println("내가 보낸 메뉴 번호: " + line);
-                pw.println(line);
+                printSocketBuffer(socket, line);
             }
-
-            System.out.println("socket 연결 종료");
         }catch(IOException e) {
             System.out.println(e.toString());
             System.out.println(String.format("%s OCCURRED", e.getClass().getSimpleName()));
             System.out.println(Arrays.asList(e.getStackTrace()));
         } finally {
             try {
+                System.out.println("socket 연결 종료");
                 keyboard.close();
                 pw.close();
                 socket.close();
@@ -73,7 +81,7 @@ public class Client {
     public static void main(String[] args){
         Socket socket = connectSocket("localhost", 10004, 5000);
         readFileData();
-        printSocketBuffer(socket);
+        getMenuFromClient(socket);
     }
 
 }
