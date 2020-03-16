@@ -6,10 +6,14 @@ import java.net.Socket;
 import java.util.Arrays;
 
 public class Client {
+
+    private static String findMenuFile(){
+        return System.getProperty("user.dir") + "/showMenu.txt";
+    }
+
     private static void readFileData(){
-        String fileName = System.getProperty("user.dir") + "/showMenu.txt";
         try {
-            BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
+            BufferedReader fileReader = new BufferedReader(new FileReader(findMenuFile()));
             String s = null;
 
             while((s = fileReader.readLine())!= null){
