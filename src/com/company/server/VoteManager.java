@@ -10,7 +10,6 @@ public class VoteManager{
         this.result = result;
     }
 
-
     protected void countVoteResult(String number) {
         result.computeIfPresent(number, (k, v) -> v + 1);
         System.out.println("현재 " + number +"는 " + result.get(number) + "입니다.");
@@ -49,16 +48,21 @@ public class VoteManager{
         System.out.println(result);
     }
 
-    public void printMenus(){
-        String fileName = System.getProperty("user.dir") + "/showMenu.txt";
+    public Iterator<Map.Entry<Integer, String>> setMenuIterator(){
         LunchMenu menu = new LunchMenu();
         Set<Map.Entry<Integer, String>> set = menu.getLunchMenu().entrySet();
         Iterator<Map.Entry<Integer, String>> itr = set.iterator();
 
+        return itr;
+    }
+    public void printMenus(){
+        Iterator<Map.Entry<Integer, String>> itr = setMenuIterator();
+
+        String fileName = System.getProperty("user.dir") + "/showMenu.txt";
         try (PrintWriter filePrintWriter = new PrintWriter(fileName)) {
             filePrintWriter.println("===============메뉴==============");
             while(itr.hasNext()){
-                Map.Entry<Integer, String> e = (Map.Entry<Integer, String>)itr.next();
+                Map.Entry<Integer, String> e = itr.next();
                 filePrintWriter.println("번호: " + e.getKey() + ", 메뉴: " + e.getValue());
             }
             filePrintWriter.println("================================");
