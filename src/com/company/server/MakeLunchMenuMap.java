@@ -25,7 +25,7 @@ public class MakeLunchMenuMap {
         }
     }
 
-    public Map<Integer, String> getLunchMenuList(){
+    public Map<Integer, String> getLunchMenuMap(){
         return this.menus;
     }
 

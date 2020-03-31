@@ -58,7 +58,6 @@ public class VoteManager{
         LunchMenu menu = new LunchMenu();
         Set<Map.Entry<Integer, String>> set = menu.getLunchMenu().entrySet();
         Iterator<Map.Entry<Integer, String>> itr = set.iterator();
-
         return itr;
     }
     public void printMenus(){

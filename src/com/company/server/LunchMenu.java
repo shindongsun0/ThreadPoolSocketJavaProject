@@ -7,6 +7,6 @@ public class LunchMenu {
         String fileName = System.getProperty("user.dir") + "/makeMenu.txt";
 
         MakeLunchMenuMap lunchMenuMap = new MakeLunchMenuMap(fileName);
-        return lunchMenuMap.getLunchMenuList();
+        return lunchMenuMap.getLunchMenuMap();
     }
 }

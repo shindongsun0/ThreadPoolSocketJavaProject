@@ -3,7 +3,6 @@ package com.company.server;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.Arrays;
 
 public class ThreadPoolSocketHandler implements Runnable{
@@ -47,7 +46,7 @@ public class ThreadPoolSocketHandler implements Runnable{
         voteManager.printMenus();
     }
 
-    public void readFromClient() {
+    public void readFromClient(BufferedReader reader) {
         String number = null;
         try {
             while (true) {
@@ -67,7 +66,7 @@ public class ThreadPoolSocketHandler implements Runnable{
     public void run(){
         connectStream();
         printMenus();
-        readFromClient();
+        readFromClient(this.reader);
         tryShutDown();
     }
 }
