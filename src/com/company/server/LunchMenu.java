@@ -4,7 +4,9 @@ import java.util.Map;
 
 public class LunchMenu {
     public Map<Integer, String> getLunchMenu(){
-        MakeLunchMenuList list = new MakeLunchMenuList();
-        return list.getLunchMenuList();
+        String fileName = System.getProperty("user.dir") + "/makeMenu.txt";
+
+        MakeLunchMenuMap lunchMenuMap = new MakeLunchMenuMap(fileName);
+        return lunchMenuMap.getLunchMenuList();
     }
 }

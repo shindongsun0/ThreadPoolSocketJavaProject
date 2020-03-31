@@ -12,12 +12,12 @@ public class Client {
         return System.getProperty("user.dir") + "/showMenu.txt";
     }
 
-    private static void readFileData(){
+    private static void readFileData(FileReader fileReader){
         try {
-            BufferedReader fileReader = new BufferedReader(new FileReader(findMenuFile()));
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
             String s = null;
 
-            while((s = fileReader.readLine())!= null){
+            while((s = bufferedReader.readLine())!= null){
                 System.out.println(s);
             }
         } catch (IOException e) {
@@ -80,7 +80,13 @@ public class Client {
 
     public static void main(String[] args){
         Socket socket = connectSocket("localhost", 10004, 5000);
-        readFileData();
+        try {
+            readFileData(new FileReader(findMenuFile()));
+        } catch (FileNotFoundException e) {
+            System.out.println(e.toString());
+            System.out.println(String.format("%s OCCURRED", e.getClass().getSimpleName()));
+            System.out.println(Arrays.asList(e.getStackTrace()));
+        }
         getMenuFromClient(socket);
     }
 

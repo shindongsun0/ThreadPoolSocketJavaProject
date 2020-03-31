@@ -13,10 +13,10 @@ final class MakeResultHashMap {
     }
 
     public static MakeResultHashMap getInstance(){
-        return LazyHolder.INSTANCE;
+        return ResultInstance.INSTANCE;
     }
 
-    private static class LazyHolder{
+    private static class ResultInstance{
         private static final MakeResultHashMap INSTANCE = new MakeResultHashMap();
     }
 

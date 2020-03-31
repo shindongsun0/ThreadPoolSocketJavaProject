@@ -19,11 +19,13 @@ public class VoteManager{
         Iterator<String> keys = result.keySet().iterator();
         int i = 0;
         lunch.add(0);
+        lunchMenu.add("");
         while(keys.hasNext()) {
             String key = keys.next();
             if (lunch.get(i) < result.get(key)) {
                 lunch.remove(0);
                 lunch.add(result.get(key));
+                lunchMenu.remove(0);
                 lunchMenu.add(key);
             }
             else if(lunch.get(i).equals(result.get(key))){
@@ -41,9 +43,9 @@ public class VoteManager{
 
         StringBuilder result = null;
         if(lunch.size() > 1){
-            result = new StringBuilder("지금까지 1위는 공동입니다.");
+            result = new StringBuilder("지금까지 1위는 공동입니다.\n");
             for(int j =0; j < lunch.size(); j++){
-                result.append("메뉴는 ").append(lunchMenu.get(j)).append(", 득표수는 ").append(lunch.get(j)).append("입니다.");
+                result.append("메뉴는 ").append(lunchMenu.get(j)).append(", 득표수는 ").append(lunch.get(j)).append("입니다. ");
             }
         }
         else {

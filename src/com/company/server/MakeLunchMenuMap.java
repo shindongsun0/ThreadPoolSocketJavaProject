@@ -7,12 +7,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MakeLunchMenuList {
+public class MakeLunchMenuMap {
     final Map<Integer, String> menus = new HashMap<>();
 
-    String fileName = System.getProperty("user.dir") + "/makeMenu.txt";
-
-    MakeLunchMenuList() {
+    MakeLunchMenuMap(String fileName) {
         try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName))) {
             String s = null;
             int i = 1;
