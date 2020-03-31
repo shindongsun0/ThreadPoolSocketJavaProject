@@ -3,10 +3,11 @@ package com.company.server;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Arrays;
 
 public class ThreadPoolSocketHandler implements Runnable{
-    private Socket clientSocket;
+    Socket clientSocket;
     VoteManager voteManager;
     PrintWriter printWriter;
     BufferedReader reader;
@@ -32,9 +33,9 @@ public class ThreadPoolSocketHandler implements Runnable{
 
     public void tryShutDown(){
         try {
-            clientSocket.close();
-            reader.close();
-            printWriter.close();
+            this.clientSocket.close();
+            this.reader.close();
+            this.printWriter.close();
         }catch(IOException e) {
             System.out.println(e.toString());
             System.out.println(Arrays.asList(e.getStackTrace()));
@@ -46,18 +47,18 @@ public class ThreadPoolSocketHandler implements Runnable{
         voteManager.printMenus();
     }
 
-    public void readFromClient(){
+    public void readFromClient() {
         String number = null;
         while (true) {
             try {
                 if (!((number = reader.readLine()) != null && !number.equals("quit")))
                     break;
+                else
+                    voteManager.countVoteResult(number);
             } catch (IOException e) {
                 System.out.println(e.toString());
                 System.out.println(Arrays.asList(e.getStackTrace()));
             }
-            System.out.println(number);
-            voteManager.countVoteResult(number);
         }
         voteManager.broadcast();
     }

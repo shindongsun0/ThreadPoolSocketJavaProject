@@ -20,7 +20,7 @@ final class MakeResultHashMap {
         private static final MakeResultHashMap INSTANCE = new MakeResultHashMap();
     }
 
-    public void setVoteResult(HashMap<Integer, String> menus){
+    public void setVoteResult(Map<Integer, String> menus){
         for(Integer menu : menus.keySet()){
             result.put(menu.toString(), 0);
         }

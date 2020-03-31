@@ -1,9 +1,9 @@
 package com.company.server;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class LunchMenu {
-    public HashMap<Integer, String> getLunchMenu(){
+    public Map<Integer, String> getLunchMenu(){
         MakeLunchMenuList list = new MakeLunchMenuList();
         return list.getLunchMenuList();
     }

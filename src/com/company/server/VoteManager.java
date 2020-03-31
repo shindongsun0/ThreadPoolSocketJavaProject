@@ -10,15 +10,13 @@ public class VoteManager{
         this.result = result;
     }
 
-    protected void countVoteResult(String number) {
+    public void countVoteResult(String number) {
         result.computeIfPresent(number, (k, v) -> v + 1);
         System.out.println("현재 " + number +"는 " + result.get(number) + "입니다.");
     }
 
-    public void broadcast(){
+    private void countLunchMenu(List<Integer> lunch, List<String> lunchMenu){
         Iterator<String> keys = result.keySet().iterator();
-        LinkedList<Integer> lunch = new LinkedList<>();
-        LinkedList<String> lunchMenu = new LinkedList<>();
         int i = 0;
         lunch.add(0);
         while(keys.hasNext()) {
@@ -34,6 +32,12 @@ public class VoteManager{
                 i++;
             }
         }
+    }
+
+    public void broadcast(){
+        List<Integer> lunch = new LinkedList<>();
+        List<String> lunchMenu = new LinkedList<>();
+        countLunchMenu(lunch, lunchMenu);
 
         StringBuilder result = null;
         if(lunch.size() > 1){
