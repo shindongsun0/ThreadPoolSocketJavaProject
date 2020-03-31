@@ -49,16 +49,16 @@ public class ThreadPoolSocketHandler implements Runnable{
 
     public void readFromClient() {
         String number = null;
-        while (true) {
-            try {
+        try {
+            while (true) {
                 if (!((number = reader.readLine()) != null && !number.equals("quit")))
                     break;
                 else
                     voteManager.countVoteResult(number);
-            } catch (IOException e) {
-                System.out.println(e.toString());
-                System.out.println(Arrays.asList(e.getStackTrace()));
             }
+        }catch (IOException e) {
+            System.out.println(e.toString());
+            System.out.println(Arrays.asList(e.getStackTrace()));
         }
         voteManager.broadcast();
     }
