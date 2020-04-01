@@ -10,6 +10,8 @@ public class ThreadPoolSocketHandler implements Runnable{
     VoteManager voteManager;
     PrintWriter printWriter;
     BufferedReader reader;
+    InputStream inputStream;
+    OutputStream outputStream;
 
     public ThreadPoolSocketHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -19,10 +21,10 @@ public class ThreadPoolSocketHandler implements Runnable{
 
     public void connectStream(){
         try {
-            InputStream inputStream = clientSocket.getInputStream();
+            this.inputStream = clientSocket.getInputStream();
             this.reader = new BufferedReader(new InputStreamReader(inputStream));
 
-            OutputStream outputStream = clientSocket.getOutputStream();
+            this.outputStream = clientSocket.getOutputStream();
             this.printWriter = new PrintWriter(new OutputStreamWriter(outputStream), true);
         }catch(IOException e) {
             System.out.println(e.toString());
@@ -59,7 +61,7 @@ public class ThreadPoolSocketHandler implements Runnable{
             System.out.println(e.toString());
             System.out.println(Arrays.asList(e.getStackTrace()));
         }
-        voteManager.broadcast();
+        voteManager.announceRecentResult();
     }
 
     @Override

@@ -9,7 +9,7 @@ public class Client {
     private static PrintWriter pw;
 
     private static String findMenuFile(){
-        return System.getProperty("user.dir") + "/showMenu.txt";
+        return System.getProperty("user.dir") + "/src/showMenu.txt";
     }
 
     private static void readFileData(FileReader fileReader){

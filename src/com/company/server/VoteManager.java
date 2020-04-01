@@ -36,7 +36,7 @@ public class VoteManager{
         }
     }
 
-    public void broadcast(){
+    public void announceRecentResult(){
         List<Integer> lunch = new LinkedList<>();
         List<String> lunchMenu = new LinkedList<>();
         countLunchMenu(lunch, lunchMenu);
@@ -63,7 +63,7 @@ public class VoteManager{
     public void printMenus(){
         Iterator<Map.Entry<Integer, String>> itr = setMenuIterator();
 
-        String fileName = System.getProperty("user.dir") + "/showMenu.txt";
+        String fileName = System.getProperty("user.dir") + "/src/showMenu.txt";
         try (PrintWriter filePrintWriter = new PrintWriter(fileName)) {
             filePrintWriter.println("===============메뉴==============");
             while(itr.hasNext()){
