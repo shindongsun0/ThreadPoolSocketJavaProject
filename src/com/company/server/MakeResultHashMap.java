@@ -3,11 +3,9 @@ package com.company.server;
 import java.util.HashMap;
 import java.util.Map;
 
-final class MakeResultHashMap {
-    private Map<String, Integer> result;
-    private MakeResultHashMap(){
-        result = new HashMap<String, Integer>();
-    }
+public class MakeResultHashMap {
+    private Map<String, Integer> result = new HashMap<String, Integer>();
+    private MakeResultHashMap(){}
 
     public static MakeResultHashMap getInstance(){
         return ResultInstance.INSTANCE;
