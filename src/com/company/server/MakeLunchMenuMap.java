@@ -6,9 +6,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MakeLunchMenuMap {
-    final Map<Integer, String> menus = new HashMap<>();
+    final Map<Integer, String> menus = new ConcurrentHashMap<>();
 
     MakeLunchMenuMap(String fileName) {
         try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName))) {
