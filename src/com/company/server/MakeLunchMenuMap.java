@@ -5,13 +5,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
-public class MakeLunchMenuList {
-    final HashMap<Integer, String> menus = new HashMap<>();
+public class MakeLunchMenuMap {
+    final Map<Integer, String> menus = new HashMap<>();
 
-    String fileName = System.getProperty("user.dir") + "/makeMenu.txt";
-
-    MakeLunchMenuList() {
+    MakeLunchMenuMap(String fileName) {
         try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName))) {
             String s = null;
             int i = 1;
@@ -26,7 +25,7 @@ public class MakeLunchMenuList {
         }
     }
 
-    public HashMap<Integer, String> getLunchMenuList(){
+    public Map<Integer, String> getLunchMenuMap(){
         return this.menus;
     }
 
