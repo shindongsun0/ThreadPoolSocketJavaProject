@@ -3,24 +3,19 @@ package com.company.server;
 import java.util.HashMap;
 import java.util.Map;
 
-final class MakeResultHashMap {
-    private Map<String, Integer> result= new HashMap<String, Integer>();
+public class MakeResultHashMap {
+    private Map<String, Integer> result = new HashMap<String, Integer>();
     private MakeResultHashMap(){}
 
-    @Override
-    protected void finalize() throws Throwable{
-        System.out.println("싱글톤 삭제");
-    }
-
     public static MakeResultHashMap getInstance(){
-        return LazyHolder.INSTANCE;
+        return ResultInstance.INSTANCE;
     }
 
-    private static class LazyHolder{
+    private static class ResultInstance{
         private static final MakeResultHashMap INSTANCE = new MakeResultHashMap();
     }
 
-    public void setVoteResult(HashMap<Integer, String> menus){
+    public void setVoteResult(Map<Integer, String> menus){
         for(Integer menu : menus.keySet()){
             result.put(menu.toString(), 0);
         }

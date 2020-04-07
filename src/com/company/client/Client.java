@@ -6,13 +6,18 @@ import java.net.Socket;
 import java.util.Arrays;
 
 public class Client {
-    private static void readFileData(){
-        String fileName = System.getProperty("user.dir") + "/showMenu.txt";
+    private static PrintWriter pw;
+
+    private static String findMenuFile(){
+        return System.getProperty("user.dir") + "/src/showMenu.txt";
+    }
+
+    private static void readFileData(FileReader fileReader){
         try {
-            BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
             String s = null;
 
-            while((s = fileReader.readLine())!= null){
+            while((s = bufferedReader.readLine())!= null){
                 System.out.println(s);
             }
         } catch (IOException e) {
@@ -22,34 +27,37 @@ public class Client {
         }
     }
 
-    private static void readSocketBuffer(Socket socket) {
-        BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
-        PrintWriter pw = null;
-        BufferedReader br = null;
+    private static void printSocketBuffer(Socket socket, String line){
+        OutputStream out = null;
         try {
-            OutputStream out = socket.getOutputStream();
-            InputStream in = socket.getInputStream();
-
+            out = socket.getOutputStream();
             pw = new PrintWriter(new OutputStreamWriter(out), true);
-            br = new BufferedReader(new InputStreamReader(in));
+            System.out.println("내가 보낸 메뉴 번호: " + line);
+            pw.println(line);
+        } catch (IOException e) {
+            System.out.println(e.toString());
+            System.out.println(String.format("%s OCCURRED", e.getClass().getSimpleName()));
+            System.out.println(Arrays.asList(e.getStackTrace()));
+        }
+    }
 
+    private static void getMenuFromClient(Socket socket) {
+        BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
+        try {
             String line = null;
 
             while((line = keyboard.readLine()) != null && !line.equals("quit")) {
-                System.out.println("내가 보낸 메뉴 번호: " + line);
-                pw.println(line);
+                printSocketBuffer(socket, line);
             }
-
-            System.out.println("socket 연결 종료");
         }catch(IOException e) {
             System.out.println(e.toString());
             System.out.println(String.format("%s OCCURRED", e.getClass().getSimpleName()));
             System.out.println(Arrays.asList(e.getStackTrace()));
         } finally {
             try {
+                System.out.println("socket 연결 종료");
                 keyboard.close();
                 pw.close();
-                br.close();
                 socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -72,8 +80,14 @@ public class Client {
 
     public static void main(String[] args){
         Socket socket = connectSocket("localhost", 10004, 5000);
-        readFileData();
-        readSocketBuffer(socket);
+        try {
+            readFileData(new FileReader(findMenuFile()));
+        } catch (FileNotFoundException e) {
+            System.out.println(e.toString());
+            System.out.println(String.format("%s OCCURRED", e.getClass().getSimpleName()));
+            System.out.println(Arrays.asList(e.getStackTrace()));
+        }
+        getMenuFromClient(socket);
     }
 
 }

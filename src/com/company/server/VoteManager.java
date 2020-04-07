@@ -10,23 +10,22 @@ public class VoteManager{
         this.result = result;
     }
 
-
-    protected void countVoteResult(String number) {
+    public void countVoteResult(String number) {
         result.computeIfPresent(number, (k, v) -> v + 1);
         System.out.println("현재 " + number +"는 " + result.get(number) + "입니다.");
     }
 
-    public void broadcast(){
+    private void countLunchMenu(List<Integer> lunch, List<String> lunchMenu){
         Iterator<String> keys = result.keySet().iterator();
-        LinkedList<Integer> lunch = new LinkedList<>();
-        LinkedList<String> lunchMenu = new LinkedList<>();
         int i = 0;
         lunch.add(0);
+        lunchMenu.add("");
         while(keys.hasNext()) {
             String key = keys.next();
             if (lunch.get(i) < result.get(key)) {
                 lunch.remove(0);
                 lunch.add(result.get(key));
+                lunchMenu.remove(0);
                 lunchMenu.add(key);
             }
             else if(lunch.get(i).equals(result.get(key))){
@@ -35,12 +34,18 @@ public class VoteManager{
                 i++;
             }
         }
+    }
+
+    public void announceRecentResult(){
+        List<Integer> lunch = new LinkedList<>();
+        List<String> lunchMenu = new LinkedList<>();
+        countLunchMenu(lunch, lunchMenu);
 
         StringBuilder result = null;
         if(lunch.size() > 1){
-            result = new StringBuilder("지금까지 1위는 공동입니다.");
+            result = new StringBuilder("지금까지 1위는 공동입니다.\n");
             for(int j =0; j < lunch.size(); j++){
-                result.append("메뉴는 ").append(lunchMenu.get(j)).append(", 득표수는 ").append(lunch.get(j)).append("입니다.");
+                result.append("메뉴는 ").append(lunchMenu.get(j)).append(", 득표수는 ").append(lunch.get(j)).append("입니다. ");
             }
         }
         else {
@@ -49,16 +54,20 @@ public class VoteManager{
         System.out.println(result);
     }
 
-    public void printMenus(){
-        String fileName = System.getProperty("user.dir") + "/showMenu.txt";
+    public Iterator<Map.Entry<Integer, String>> setMenuIterator(){
         LunchMenu menu = new LunchMenu();
         Set<Map.Entry<Integer, String>> set = menu.getLunchMenu().entrySet();
         Iterator<Map.Entry<Integer, String>> itr = set.iterator();
+        return itr;
+    }
+    public void printMenus(){
+        Iterator<Map.Entry<Integer, String>> itr = setMenuIterator();
 
+        String fileName = System.getProperty("user.dir") + "/src/showMenu.txt";
         try (PrintWriter filePrintWriter = new PrintWriter(fileName)) {
             filePrintWriter.println("===============메뉴==============");
             while(itr.hasNext()){
-                Map.Entry<Integer, String> e = (Map.Entry<Integer, String>)itr.next();
+                Map.Entry<Integer, String> e = itr.next();
                 filePrintWriter.println("번호: " + e.getKey() + ", 메뉴: " + e.getValue());
             }
             filePrintWriter.println("================================");

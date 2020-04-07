@@ -11,7 +11,8 @@ public class ThreadPoolSocketServer{
         try {
             ServerSocket serverSocket = new ServerSocket(portNum);
             ExecutorService executorService = Executors.newFixedThreadPool(poolNum);
-            setMenuAndResult();
+
+            setMenuAndResult(new LunchMenu());
 
             while (!executorService.isShutdown()) {
                 executorService.execute(new ThreadPoolSocketHandler(serverSocket.accept()));
@@ -22,8 +23,7 @@ public class ThreadPoolSocketServer{
             System.out.println(Arrays.asList(e.getStackTrace()));
         }
     }
-    private void setMenuAndResult(){
-        LunchMenu menu = new LunchMenu();
+    private void setMenuAndResult(LunchMenu menu){
         MakeResultHashMap.getInstance().setVoteResult(menu.getLunchMenu());
     }
 }

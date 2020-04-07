@@ -6,9 +6,12 @@ import java.net.Socket;
 import java.util.Arrays;
 
 public class ThreadPoolSocketHandler implements Runnable{
-    private Socket clientSocket;
+    Socket clientSocket;
     VoteManager voteManager;
     PrintWriter printWriter;
+    BufferedReader reader;
+    InputStream inputStream;
+    OutputStream outputStream;
 
     public ThreadPoolSocketHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -16,33 +19,56 @@ public class ThreadPoolSocketHandler implements Runnable{
         System.out.println(inetAddress.getHostAddress() + " 로부터 접속했습니다.");
     }
 
+    public void connectStream(){
+        try {
+            this.inputStream = clientSocket.getInputStream();
+            this.reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            this.outputStream = clientSocket.getOutputStream();
+            this.printWriter = new PrintWriter(new OutputStreamWriter(outputStream), true);
+        }catch(IOException e) {
+            System.out.println(e.toString());
+            System.out.println(Arrays.asList(e.getStackTrace()));
+        }
+    }
+
+    public void tryShutDown(){
+        try {
+            this.clientSocket.close();
+            this.reader.close();
+            this.printWriter.close();
+        }catch(IOException e) {
+            System.out.println(e.toString());
+            System.out.println(Arrays.asList(e.getStackTrace()));
+        }
+    }
+
+    public void printMenus(){
+        voteManager = new VoteManager(MakeResultHashMap.getInstance().getVoteResultMap());
+        voteManager.printMenus();
+    }
+
+    public void readFromClient(BufferedReader reader) {
+        String number = null;
+        try {
+            while (true) {
+                if (!((number = reader.readLine()) != null && !number.equals("quit")))
+                    break;
+                else
+                    voteManager.countVoteResult(number);
+            }
+        }catch (IOException e) {
+            System.out.println(e.toString());
+            System.out.println(Arrays.asList(e.getStackTrace()));
+        }
+        voteManager.announceRecentResult();
+    }
 
     @Override
     public void run(){
-        try{
-            InputStream inputStream = clientSocket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            OutputStream outputStream = clientSocket.getOutputStream();
-            printWriter = new PrintWriter(new OutputStreamWriter(outputStream), true);
-
-            voteManager = new VoteManager(MakeResultHashMap.getInstance().getVoteResultMap());
-            voteManager.printMenus();
-
-            String number = null;
-            while ((number = reader.readLine()) != null && !number.equals("quit")) {
-                System.out.println(number);
-                voteManager.countVoteResult(number);
-            }
-            voteManager.broadcast();
-
-            clientSocket.close();
-            reader.close();
-            printWriter.close();
-        } catch(IOException e) {
-            System.out.println(e.toString());
-            System.out.println(String.format("%s OCCURRED", e.getClass().getSimpleName()));
-            System.out.println(Arrays.asList(e.getStackTrace()));
-        }
+        connectStream();
+        printMenus();
+        readFromClient(this.reader);
+        tryShutDown();
     }
 }
